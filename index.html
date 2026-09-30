@@ -2,15 +2,15 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>প্রিমিয়াম রানিং জুতা | ই-শপ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
             background-color: #f8fafc;
         }
 
@@ -46,9 +46,43 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8; 
         }
+
+        /* iOS-এ ইনপুটে ফোকাস করলে অটো-জুম বন্ধ */
+        @media (max-width: 640px) { input, select, textarea { font-size: 16px !important; } }
+
+        /* অ্যানিমেশন */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+        @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+        .anim-fade-up { animation: fadeUp .6s cubic-bezier(.2,.7,.2,1) backwards; }
+        .anim-fade-in { animation: fadeIn .25s ease backwards; }
+        .anim-pop { animation: popIn .35s cubic-bezier(.2,1.2,.3,1) backwards; }
+        .anim-pop-delay { animation: popIn .45s .2s cubic-bezier(.2,1.4,.3,1) backwards; }
+        .anim-slide-up { animation: slideUp .5s .8s cubic-bezier(.2,.7,.2,1) backwards; }
+        .bump { animation: bump .35s ease; }
+        .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+        .reveal.is-visible { opacity: 1; transform: none; }
+        #discount-row:not(.hidden), #remove-coupon:not(.hidden) { animation: slideDown .3s ease; }
+        #coupon-message:not(.hidden) { animation: fadeIn .25s ease; }
+        button:not(:disabled) { transition-property: transform, background-color, color, box-shadow, opacity, border-color !important; transition-duration: .18s !important; }
+        button:not(:disabled):active { transform: scale(.97); }
+        .thumbnail-btn:hover { transform: translateY(-2px); }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+            .reveal { opacity: 1; transform: none; }
+        }
+        .size-btn[aria-checked="true"] { background: #4f46e5; border-color: #4f46e5; color: #fff; box-shadow: 0 4px 10px rgba(79,70,229,.25); }
+        .coupon-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+        .coupon-panel.open { grid-template-rows: 1fr; }
+        #coupon-chevron { transition: transform .2s ease; }
+        #coupon-toggle[aria-expanded="true"] #coupon-chevron { transform: rotate(180deg); }
+        #coupon-toggle[data-applied="true"] { color: #16a34a; }
     </style>
 </head>
-<body class="text-gray-800 antialiased">
+<body class="text-gray-800 antialiased pb-24 lg:pb-0 min-h-screen flex flex-col">
 
     <!-- ওপর Coupon Announcement -->
     <div class="bg-indigo-600 text-white px-4 py-3 text-center text-sm sm:text-base">
@@ -56,66 +90,82 @@
             <i class="fas fa-tags" aria-hidden="true"></i>
             <span class="font-semibold">বিশেষ অফার!</span>
             <span>কুপন কোড</span>
-            <button type="button" onclick="useCouponCode('DISCOUNT10')" class="inline-flex items-center rounded-md border border-white/70 bg-white/15 px-2 py-1 font-bold tracking-wide hover:bg-white/25">DISCOUNT10 <i class="far fa-copy ml-2" aria-hidden="true"></i></button>
+            <button type="button" onclick="useCouponCode('DISCOUNT10')" class="inline-flex items-center rounded-md border border-white/70 bg-white/15 px-2 py-1 font-bold tracking-wide hover:bg-white/25">DISCOUNT10 <i class="fas fa-arrow-down ml-2" aria-hidden="true"></i></button>
             <span>ব্যবহার করে অতিরিক্ত ১০% ছাড় পান।</span>
         </div>
     </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <main class="w-full flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
         
-        <div class="flex flex-col lg:flex-row gap-12">
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
             
-            <div class="w-full lg:w-1/2 space-y-8" id="product-section">
+            <div class="mx-auto w-full max-w-2xl lg:max-w-none lg:w-1/2 space-y-8 anim-fade-up" id="product-section">
                 
+                <div class="min-w-0 space-y-6">
                 <!-- পণ্য Image Gallery -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-6 flex justify-center items-center h-[400px] md:h-[500px] relative cursor-crosshair group" id="image-container" onmousemove="zoomImage(event)" onmouseleave="resetZoom()">
-                    <img id="main-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85" alt="কালো রঙের ডেমো রানিং জুতা" class="object-contain w-full h-full transition-transform duration-200" onerror="this.onerror=null;this.src='https://placehold.co/600x600/f1f5f9/334155?text=Demo+Shoe';">
-                    <span class="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-gray-600 shadow">ডেমো পণ্যের ছবি</span>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-3 sm:p-6 flex justify-center items-center h-[300px] sm:h-[400px] md:h-[460px] lg:h-[500px] relative cursor-zoom-in group" id="image-container" role="button" tabindex="0" aria-label="ছবি বড় করে দেখুন" onkeydown="if(event.key==='Enter')openLightbox()" onmousemove="zoomImage(event)" onmouseleave="resetZoom()" onclick="openLightbox()">
+                    <img id="main-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85" alt="রানিং জুতা" class="object-contain w-full h-full transition duration-200" onerror="this.onerror=null;this.src='https://placehold.co/600x600/f1f5f9/334155?text=Shoe';">
+                    <span class="pointer-events-none absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow" aria-hidden="true"><i class="fas fa-search-plus"></i></span>
                 </div>
                 
                 <!-- একাধিক ডেমো জুতার ছবি -->
                 <div class="flex space-x-4 overflow-x-auto pb-2" id="thumbnail-gallery">
-                    <button type="button" data-gallery-index="0" onclick="changeImage(this.querySelector('img').src)" class="border-2 border-indigo-600 rounded-lg overflow-hidden h-20 w-20 flex-shrink-0 thumbnail-btn focus:outline-none">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=80" alt="জুতার পাশের দৃশ্য" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+1'">
+                    <button type="button" data-gallery-index="0" onclick="changeImage(this.querySelector('img').src)" class="border-2 border-indigo-600 rounded-lg overflow-hidden h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 thumbnail-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=80" alt="জুতার পাশের দৃশ্য" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+1'">
                     </button>
-                    <button type="button" data-gallery-index="1" onclick="changeImage(this.querySelector('img').src)" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-20 w-20 flex-shrink-0 thumbnail-btn focus:outline-none transition-colors">
-                        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=220&q=80" alt="জুতার ওপরের দৃশ্য" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+2'">
+                    <button type="button" data-gallery-index="1" onclick="changeImage(this.querySelector('img').src)" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 thumbnail-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=220&q=80" alt="জুতার ওপরের দৃশ্য" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+2'">
                     </button>
-                    <button type="button" data-gallery-index="2" onclick="changeImage(this.querySelector('img').src)" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-20 w-20 flex-shrink-0 thumbnail-btn focus:outline-none transition-colors">
-                        <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=220&q=80" alt="জুতার আরেকটি দৃশ্য" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+3'">
+                    <button type="button" data-gallery-index="2" onclick="changeImage(this.querySelector('img').src)" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 thumbnail-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=220&q=80" alt="জুতার আরেকটি দৃশ্য" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+3'">
                     </button>
-                    <button type="button" data-gallery-index="3" onclick="changeImage(this.querySelector('img').src.replace('w=220','w=900'))" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-20 w-20 flex-shrink-0 thumbnail-btn focus:outline-none transition-colors">
-                        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=220&q=80" alt="ডেমো স্পোর্টস জুতা ৪" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+4'">
+                    <button type="button" data-gallery-index="3" onclick="changeImage(this.querySelector('img').src.replace('w=220','w=900'))" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 thumbnail-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=220&q=80" alt="স্পোর্টস জুতা ৪" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+4'">
                     </button>
-                    <button type="button" data-gallery-index="4" onclick="changeImage(this.querySelector('img').src.replace('w=220','w=900'))" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-20 w-20 flex-shrink-0 thumbnail-btn focus:outline-none transition-colors">
-                        <img src="https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=220&q=80" alt="ডেমো ক্যাজুয়াল জুতা ৫" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+5'">
+                    <button type="button" data-gallery-index="4" onclick="changeImage(this.querySelector('img').src.replace('w=220','w=900'))" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 thumbnail-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=220&q=80" alt="ক্যাজুয়াল জুতা ৫" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+5'">
                     </button>
-                    <button type="button" data-gallery-index="5" onclick="changeImage(this.querySelector('img').src.replace('w=220','w=900'))" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-20 w-20 flex-shrink-0 thumbnail-btn focus:outline-none transition-colors">
-                        <img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=220&q=80" alt="ডেমো স্নিকার্স ৬" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+6'">
+                    <button type="button" data-gallery-index="5" onclick="changeImage(this.querySelector('img').src.replace('w=220','w=900'))" class="border-2 border-transparent hover:border-gray-300 rounded-lg overflow-hidden h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 thumbnail-btn focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=220&q=80" alt="স্নিকার্স ৬" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe+6'">
                     </button>
                 </div>
 
+                </div>
+
                 <!-- পণ্য Info -->
-                <div class="space-y-4">
+                <div class="min-w-0 space-y-4">
                     <div class="flex flex-col space-y-2">
                         <div>
-                            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Nike Air Zoom Pegasus 39</h1>
+                            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">Nike Air Zoom Pegasus 39</h1>
                             <p class="text-lg text-gray-500 mt-1">পুরুষদের দৌড়ানোর জুতা</p>
                         </div>
                         <div>
                             <div class="flex flex-wrap items-center gap-3">
-                                <p class="text-3xl font-bold text-indigo-600">৳১২,৫০০ <span class="text-base text-gray-400 line-through ml-2 font-normal">৳১৪,০০০</span></p>
+                                <p class="text-2xl sm:text-3xl font-bold text-indigo-600">৳১২,৫০০ <span class="text-base text-gray-400 line-through ml-2 font-normal">৳১৪,০০০</span></p>
                                 <span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-bold text-red-700">১১% ছাড়</span>
                             </div>
                             <p class="text-sm text-green-700 mt-1">আপনি সাশ্রয় করছেন ৳১,৫০০</p>
-                            <div class="mt-4 flex w-full max-w-md flex-col gap-3">
-                                <button type="button" onclick="scrollToCheckout()" class="inline-flex w-full items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white shadow-md shadow-indigo-200 transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                    <span>এখনই অর্ডার করুন</span>
-                                    <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i>
-                                </button>
+                            <div class="mt-4" id="size-selector">
+                                <div class="flex items-center justify-between gap-3">
+                                    <p id="size-label" class="text-sm font-semibold text-gray-900">সাইজ (EU): <span id="size-current" class="text-indigo-600">41</span></p>
+                                    <button type="button" onclick="openSizeChart()" class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-800"><i class="fas fa-ruler" aria-hidden="true"></i> সাইজ চার্ট</button>
+                                </div>
+                                <div class="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-labelledby="size-label">
+                                    <button type="button" role="radio" aria-checked="false" data-size="40" onclick="selectSize('40')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">40</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="41" onclick="selectSize('41')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">41</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="42" onclick="selectSize('42')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">42</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="43" onclick="selectSize('43')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">43</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="44" onclick="selectSize('44')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">44</button>
+                                </div>
+                            </div>
+                            <div class="mt-4 grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                                 <button type="button" onclick="orderViaWhatsApp()" class="inline-flex w-full items-center justify-center rounded-xl bg-green-600 px-6 py-3 font-semibold text-white shadow-md shadow-green-200 transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                                     <i class="fab fa-whatsapp mr-2 text-xl" aria-hidden="true"></i>
                                     <span>হোয়াটসঅ্যাপে অর্ডার করুন</span>
+                                </button>
+                                <button type="button" onclick="orderViaMessenger()" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-md shadow-blue-200 transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    <i class="fab fa-facebook-messenger mr-2 text-xl" aria-hidden="true"></i>
+                                    <span>মেসেঞ্জারে অর্ডার করুন</span>
                                 </button>
                             </div>
                         </div>
@@ -123,7 +173,7 @@
 
                     <hr class="border-gray-200">
 
-                    <!-- সাইজ এখন শুধু অর্ডার সামারি থেকে নির্বাচন করা যাবে -->
+                    
 
                     <!-- Enhanced পণ্য Details (Bangla) -->
                     <section class="pt-5" aria-labelledby="product-details-title">
@@ -151,7 +201,7 @@
                                     <div><dt class="text-gray-500">সাইজ</dt><dd class="mt-1 font-medium text-gray-900">EU 40–44</dd></div>
                                 </dl>
                             </div>
-                            <p class="mt-4 text-xs leading-5 text-gray-500"><i class="fas fa-info-circle mr-1"></i> কেনার আগে সাইজ গাইড দেখে নিজের পায়ের মাপের সঙ্গে মিলিয়ে নিন।</p>
+                            <p class="mt-4 text-xs leading-5 text-gray-500"><i class="fas fa-info-circle mr-1"></i> অর্ডারের আগে নিজের পায়ের মাপের সঙ্গে সাইজ মিলিয়ে নিন।</p>
                         </div>
                     </section>
 
@@ -165,7 +215,7 @@
                             </div>
                             <div class="flex items-start gap-3">
                                 <i class="fas fa-ruler-combined text-indigo-600 mt-0.5"></i>
-                                <div><p class="font-semibold text-gray-900">নিজের পছন্দমতো সাইজ ও রং</p><p>অর্ডার করার আগে উপলভ্য সাইজ ও রঙের বিকল্প থেকে নির্বাচন করুন।</p></div>
+                                <div><p class="font-semibold text-gray-900">নিজের পছন্দমতো সাইজ</p><p>প্রোডাক্টের দামের নিচ থেকে সাইজ বেছে নিন, চাইলে সাইজ চার্ট দেখুন।</p></div>
                             </div>
                             <div class="flex items-start gap-3">
                                 <i class="fas fa-truck text-indigo-600 mt-0.5"></i>
@@ -185,8 +235,8 @@
                 </div>
             </div>
 
-            <div class="w-full lg:w-1/2" id="checkout-section">
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sm:p-8 lg:sticky lg:top-24">
+            <div class="mx-auto w-full max-w-2xl lg:max-w-none lg:w-1/2 anim-fade-up" style="animation-delay:.15s" id="checkout-section">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-8 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                         <i class="fas fa-lock text-green-500 mr-2 text-xl"></i> নিরাপদে অর্ডার করুন
                     </h2>
@@ -195,32 +245,22 @@
                     <div class="bg-gray-50 rounded-xl p-4 mb-8">
                         <h3 class="text-sm font-semibold text-gray-700 tracking-wider mb-4">অর্ডার সামারি</h3>
                         
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="flex items-center">
-                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=80" alt="ডেমো জুতা" class="w-12 h-12 rounded bg-white object-cover border border-gray-200">
-                                <div class="ml-3">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="flex min-w-0 flex-1 items-center">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=80" alt="জুতা" class="w-12 h-12 shrink-0 rounded bg-white object-cover border border-gray-200" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe'">
+                                <div class="ml-3 min-w-0">
                                     <p class="text-sm font-medium text-gray-900">Nike Air Zoom Pegasus 39</p>
-                                    <label for="summary-size" class="mt-2 flex items-center gap-2 text-xs text-gray-600">
-                                        <span>সাইজ (EU):</span>
-                                        <select id="summary-size" class="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" aria-label="অর্ডার সামারিতে জুতার সাইজ নির্বাচন করুন">
-                                            <option value="40">40</option>
-                                            <option value="41" selected>41</option>
-                                            <option value="42">42</option>
-                                            <option value="43">43</option>
-                                            <option value="44">44</option>
-                                        </select>
-                                    </label>
-                                    <p class="text-xs text-gray-500 mt-1" id="summary-details">সাইজ: EU 41</p>
+                                    <p class="text-xs text-gray-600 mt-1" id="summary-details">সাইজ: EU 41</p>
                                 </div>
                             </div>
                             
                             <!-- Quantity Control -->
-                            <div class="flex items-center border border-gray-300 rounded-lg bg-white">
-                                <button type="button" onclick="updateQuantity(-1)" class="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded-l-lg focus:outline-none">
+                            <div class="flex shrink-0 items-center border border-gray-300 rounded-lg bg-white">
+                                <button type="button" onclick="updateQuantity(-1)" aria-label="পরিমাণ কমান" class="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-100 rounded-l-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
                                     <i class="fas fa-minus text-xs"></i>
                                 </button>
-                                <input type="number" id="quantity" value="1" min="1" max="10" class="w-10 text-center text-sm font-medium text-gray-900 focus:outline-none bg-transparent" readonly>
-                                <button type="button" onclick="updateQuantity(1)" class="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded-r-lg focus:outline-none">
+                                <input type="number" id="quantity" aria-label="পরিমাণ" value="1" min="1" max="10" class="w-8 text-center text-sm font-medium text-gray-900 focus:outline-none bg-transparent" readonly>
+                                <button type="button" onclick="updateQuantity(1)" aria-label="পরিমাণ বাড়ান" class="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-100 rounded-r-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
                                     <i class="fas fa-plus text-xs"></i>
                                 </button>
                             </div>
@@ -248,16 +288,25 @@
                             </div>
                         </div>
 
-                        <!-- Coupon Code Section -->
-                        <div class="mt-6 border-t border-gray-200 pt-4">
-                            <label for="coupon" class="block text-sm font-medium text-gray-700 mb-2">কুপন কোড ব্যবহার করুন</label>
-                            <div class="flex space-x-2">
-                                <input type="text" id="coupon" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-sm uppercase" placeholder="কুপন কোড লিখুন (যেমন: DISCOUNT10)">
-                                <button type="button" onclick="applyCoupon()" class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
-                                    প্রয়োগ করুন
-                                </button>
+                        <!-- Coupon Code Section (বাটনে ক্লিক করলে খুলবে) -->
+                        <div class="mt-4 border-t border-gray-200 pt-3">
+                            <button type="button" id="coupon-toggle" onclick="toggleCoupon()" aria-expanded="false" aria-controls="coupon-panel" class="flex w-full items-center justify-between py-1 text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus-visible:underline">
+                                <span class="inline-flex items-center gap-2"><i class="fas fa-tag" aria-hidden="true"></i><span id="coupon-toggle-label">কুপন কোড আছে?</span></span>
+                                <i id="coupon-chevron" class="fas fa-chevron-down text-xs" aria-hidden="true"></i>
+                            </button>
+                            <div id="coupon-panel" class="coupon-panel" inert>
+                                <div class="overflow-hidden">
+                                    <div class="px-0.5 pb-0.5 pt-3">
+                                        <label for="coupon" class="sr-only">কুপন কোড</label>
+                                        <div class="flex space-x-2">
+                                            <input type="text" id="coupon" class="min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-base sm:text-sm uppercase" placeholder="কুপন কোড লিখুন">
+                                            <button type="button" onclick="applyCoupon()" class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">প্রয়োগ করুন</button>
+                                        </div>
+                                        <p id="coupon-message" class="text-xs mt-2 hidden"></p>
+                                        <button type="button" id="remove-coupon" onclick="removeCoupon()" class="hidden mt-2 text-xs font-medium text-red-600 underline">কুপন সরান</button>
+                                    </div>
+                                </div>
                             </div>
-                            <p id="coupon-message" class="text-xs mt-2 hidden"></p>
                         </div>
                     </div>
 
@@ -274,7 +323,7 @@
                                 </div>
                                 <div>
                                     <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">মোবাইল নম্বর *</label>
-                                    <input type="tel" id="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" placeholder="01XXX-XXXXXX">
+                                    <input type="tel" id="phone" required inputmode="numeric" pattern="(\+?88)?01[3-9][0-9]{8}" title="সঠিক মোবাইল নম্বর দিন (যেমন: 01712345678)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" placeholder="01XXXXXXXXX">
                                 </div>
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">ইমেইল ঠিকানা</label>
@@ -332,7 +381,18 @@
         </div>
     </main>
 
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+    <!-- শুধু মোবাইলে স্টিকি অর্ডার বার -->
+    <div id="sticky-order-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-4px_12px_rgba(0,0,0,0.08)] backdrop-blur anim-slide-up transition-transform duration-200">
+        <div class="mx-auto flex max-w-md items-center gap-4">
+            <div class="shrink-0">
+                <p class="text-xs text-gray-500">সর্বমোট</p>
+                <p id="sticky-total" class="text-lg font-bold text-indigo-600">৳১২,৫৬০</p>
+            </div>
+            <button type="button" onclick="scrollToCheckout()" class="inline-flex flex-1 items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow-md shadow-indigo-200 transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">অর্ডার করুন</button>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-24 lg:bottom-5 left-4 right-4 sm:left-auto sm:right-5 z-50 flex flex-col items-end gap-2"></div>
 
     <footer class="bg-white border-t border-gray-200 mt-12 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
@@ -347,7 +407,7 @@
         let shippingCost = 60; // ঢাকার ভেতরের ডিফল্ট চার্জ
         let discount = 0;
         let appliedCoupon = null;
-        let selectedরং = 'কালো';
+        
         let selectedSize = '41';
 
         // Mock valid coupons
@@ -356,93 +416,89 @@
             'SAVE500': 500    // ৫০০ টাকা ছাড়
         };
         
+        const setAnimated = (id, text) => {
+            const el = document.getElementById(id);
+            if (el.innerText === text) return;
+            el.innerText = text;
+            el.classList.remove('bump');
+            void el.offsetWidth;
+            el.classList.add('bump');
+        };
+        const bn = (n) => Number(n).toLocaleString('bn-BD');
         const formatCurrency = (amount) => {
-            return '৳' + amount.toLocaleString('en-BD');
+            return '৳' + bn(Math.round(amount));
         };
 
         // UI Update Functions
         const updateCalculations = () => {
             const subtotal = BASE_PRICE * quantity;
-            
-            // Recalculate discount if a percentage coupon is applied based on new subtotal
-            if (appliedCoupon && validCoupons[appliedCoupon] < 100) { // Assuming <100 is percentage
-                discount = subtotal * (validCoupons[appliedCoupon] / 100);
-            } else if (appliedCoupon && validCoupons[appliedCoupon] >= 100) {
-                 // Flat discount remains same, unless it's more than subtotal
-                 discount = Math.min(validCoupons[appliedCoupon], subtotal);
+            if (appliedCoupon) {
+                const v = validCoupons[appliedCoupon];
+                discount = v < 100 ? Math.round(subtotal * v / 100) : Math.min(v, subtotal);
+            } else {
+                discount = 0;
             }
+            const total = Math.max(0, subtotal + shippingCost - discount);
 
-            const total = subtotal + shippingCost - discount;
-            
             document.getElementById('subtotal').innerText = formatCurrency(subtotal);
             document.getElementById('shipping-cost').innerText = formatCurrency(shippingCost);
-            
+            document.getElementById('discount-row').classList.toggle('hidden', !(discount > 0));
             if (discount > 0) {
-                document.getElementById('discount-row').classList.remove('hidden');
                 document.getElementById('discount-amount').innerText = '-' + formatCurrency(discount);
                 document.getElementById('applied-coupon-name').innerText = appliedCoupon;
-            } else {
-                document.getElementById('discount-row').classList.add('hidden');
             }
+            document.getElementById('remove-coupon').classList.toggle('hidden', !appliedCoupon);
+            document.getElementById('coupon-toggle-label').innerText = appliedCoupon ? `কুপন প্রয়োগ হয়েছে: ${appliedCoupon}` : 'কুপন কোড আছে?';
+            document.getElementById('coupon-toggle').dataset.applied = appliedCoupon ? 'true' : 'false';
+            setAnimated('total-price', formatCurrency(total));
+            setAnimated('sticky-total', formatCurrency(total));
+        };
 
-            document.getElementById('total-price').innerText = formatCurrency(Math.max(0, total)); // Prevent negative total
+        window.toggleCoupon = (forceOpen) => {
+            const btn = document.getElementById('coupon-toggle');
+            const panel = document.getElementById('coupon-panel');
+            const open = typeof forceOpen === 'boolean' ? forceOpen : btn.getAttribute('aria-expanded') !== 'true';
+            btn.setAttribute('aria-expanded', String(open));
+            panel.classList.toggle('open', open);
+            panel.inert = !open;
+            if (open) setTimeout(() => document.getElementById('coupon').focus({ preventScroll: true }), 320);
         };
 
         window.useCouponCode = (code) => {
             const couponInput = document.getElementById('coupon');
             couponInput.value = code;
+            toggleCoupon(true);
             document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
             window.applyCoupon();
         };
 
         window.applyCoupon = () => {
-            const couponInput = document.getElementById('coupon').value.trim().toUpperCase();
+            const code = document.getElementById('coupon').value.trim().toUpperCase();
             const messageEl = document.getElementById('coupon-message');
-            
-            if (!couponInput) {
-                showMessage(messageEl, 'অনুগ্রহ করে কুপন কোড লিখুন।', 'error');
-                return;
-            }
-
-            if (appliedCoupon === couponInput) {
-                 showMessage(messageEl, 'এই কুপন কোডটি ইতিমধ্যে ব্যবহার করা হয়েছে।', 'error');
-                 return;
-            }
-
-            if (validCoupons.hasOwnProperty(couponInput)) {
-                appliedCoupon = couponInput;
-                const value = validCoupons[couponInput];
-                
-                if (value < 100) { // Treat as percentage
-                    discount = (BASE_PRICE * quantity) * (value / 100);
-                    showMessage(messageEl, `${value}% ছাড় সফলভাবে প্রয়োগ হয়েছে!`, 'success');
-                } else { // Treat as flat amount
-                    discount = value;
-                    showMessage(messageEl, `${formatCurrency(value)} পরিমাণ নির্দিষ্ট ছাড় সফলভাবে প্রয়োগ হয়েছে!`, 'success');
-                }
-                
-                document.getElementById('coupon').value = ''; // Clear input
-                updateCalculations();
-                showToast(`কুপন ${couponInput} প্রয়োগ হয়েছে!`, 'success');
-
-            } else {
-                appliedCoupon = null;
-                discount = 0;
-                updateCalculations();
-                showMessage(messageEl, 'কুপন কোডটি ভুল অথবা মেয়াদ শেষ হয়েছে।', 'error');
-            }
+            if (!code) { showMessage(messageEl, 'অনুগ্রহ করে কুপন কোড লিখুন।', 'error'); return; }
+            if (appliedCoupon === code) { showMessage(messageEl, 'এই কুপন কোডটি ইতিমধ্যে প্রয়োগ করা হয়েছে।', 'error'); return; }
+            if (!validCoupons.hasOwnProperty(code)) { showMessage(messageEl, 'কুপন কোডটি ভুল অথবা মেয়াদ শেষ হয়েছে।', 'error'); return; }
+            appliedCoupon = code;
+            const value = validCoupons[code];
+            document.getElementById('coupon').value = '';
+            updateCalculations();
+            showMessage(messageEl, value < 100 ? `${bn(value)}% ছাড় সফলভাবে প্রয়োগ হয়েছে!` : `${formatCurrency(value)} ছাড় সফলভাবে প্রয়োগ হয়েছে!`, 'success');
+            showToast(`কুপন ${code} প্রয়োগ হয়েছে!`, 'success');
         };
 
+        window.removeCoupon = () => {
+            appliedCoupon = null;
+            document.getElementById('coupon-message').classList.add('hidden');
+            updateCalculations();
+        };
+
+        let couponMsgTimer;
         const showMessage = (element, text, type) => {
             element.innerText = text;
             element.className = `text-xs mt-2 ${type === 'success' ? 'text-green-600' : 'text-red-500'}`;
-            element.classList.remove('hidden');
-            
-            // Hide message after a while if it's an error
-            if(type === 'error') {
-                 setTimeout(() => {
-                     element.classList.add('hidden');
-                 }, 3000);
+            clearTimeout(couponMsgTimer);
+            if (type === 'error') {
+                couponMsgTimer = setTimeout(() => element.classList.add('hidden'), 3000);
             }
         };
 
@@ -461,31 +517,13 @@
             updateCalculations();
         };
 
-        // ডেমো জুতার রং অনুযায়ী মূল ছবি ও গ্যালারি পরিবর্তন
-        const shoeImagesByColor = {
-            black: [
-                'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85',
-                'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85',
-                'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=85'
-            ],
-            silver: [
-                'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85',
-                'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85',
-                'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=900&q=85'
-            ],
-            blue: [
-                'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=85',
-                'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=900&q=85',
-                'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85'
-            ]
-        };
-
         window.changeImage = (src) => {
             const mainImg = document.getElementById('main-image');
-            mainImg.style.opacity = '0.45';
+            const nextSrc = src.replace('w=220', 'w=900');
+            if (mainImg.src !== nextSrc) mainImg.style.opacity = '0.45';
             const finishChange = () => { mainImg.style.opacity = '1'; };
             mainImg.onload = finishChange;
-            mainImg.src = src.replace('w=220', 'w=900');
+            mainImg.src = nextSrc;
             document.querySelectorAll('.thumbnail-btn').forEach(btn => {
                 const active = btn.querySelector('img').src === src || btn.querySelector('img').src.replace(/w=220/, 'w=900') === src;
                 btn.classList.toggle('border-indigo-600', active);
@@ -493,53 +531,150 @@
             });
         };
 
-        const updateShoeColorGallery = (color) => {
-            const images = shoeImagesByColor[color] || shoeImagesByColor.black;
-            const mainImg = document.getElementById('main-image');
-            mainImg.alt = `${color === 'black' ? 'কালো' : color === 'silver' ? 'সিলভার/সাদা' : 'নেভি ব্লু'} রঙের ডেমো জুতা`;
-            mainImg.src = images[0];
-            document.querySelectorAll('#thumbnail-gallery .thumbnail-btn img').forEach((img, index) => {
-                img.src = images[index].replace('w=900', 'w=220');
+        // সাইজ নির্বাচন (প্রোডাক্টের দামের নিচে)। অর্ডার সামারিতে শুধু দেখানো হয়।
+        window.selectSize = (size) => {
+            selectedSize = String(size);
+            document.querySelectorAll('.size-btn').forEach((b) => {
+                b.setAttribute('aria-checked', b.dataset.size === selectedSize ? 'true' : 'false');
             });
-            document.querySelectorAll('#thumbnail-gallery .thumbnail-btn').forEach((btn, index) => {
-                btn.classList.toggle('border-indigo-600', index === 0);
-                btn.classList.toggle('border-transparent', index !== 0);
-            });
-        };
-
-        // সাইজ শুধু অর্ডার সামারি থেকে নির্বাচন করা যাবে
-        const updateSummaryText = () => {
-            selectedSize = document.getElementById('summary-size').value;
+            document.getElementById('size-current').innerText = selectedSize;
             document.getElementById('summary-details').innerText = `সাইজ: EU ${selectedSize}`;
         };
-        document.getElementById('summary-size').addEventListener('change', updateSummaryText);
-        updateSummaryText();
+        selectSize(selectedSize);
+
+        // সাইজ চার্ট (আনুমানিক; আসল পণ্যের চার্ট দিয়ে মিলিয়ে নিন)
+        const SIZE_CHART = [
+            { eu: '40', uk: '6',   us: '7',   cm: '25.0' },
+            { eu: '41', uk: '7',   us: '8',   cm: '26.0' },
+            { eu: '42', uk: '7.5', us: '8.5', cm: '26.5' },
+            { eu: '43', uk: '8.5', us: '9.5', cm: '27.5' },
+            { eu: '44', uk: '9',   us: '10',  cm: '28.0' }
+        ];
+        window.openSizeChart = () => {
+            if (document.getElementById('size-chart-modal')) return;
+            const opener = document.activeElement;
+            const overlay = document.createElement('div');
+            overlay.id = 'size-chart-modal';
+            overlay.className = 'fixed inset-0 z-[105] flex items-end justify-center bg-gray-900/60 backdrop-blur-sm sm:items-center sm:p-4 anim-fade-in';
+            overlay.setAttribute('role', 'dialog');
+            overlay.setAttribute('aria-modal', 'true');
+            overlay.setAttribute('aria-label', 'সাইজ চার্ট');
+            const rows = SIZE_CHART.map((r) => `
+                <tr data-size="${r.eu}" tabindex="0" role="button" class="cursor-pointer border-t border-gray-100 transition-colors hover:bg-indigo-50 focus:outline-none focus-visible:bg-indigo-50 ${r.eu === selectedSize ? 'bg-indigo-50 font-semibold text-indigo-700' : 'text-gray-800'}">
+                    <td class="px-3 py-3">${r.eu}</td><td class="px-3 py-3">${r.uk}</td><td class="px-3 py-3">${r.us}</td><td class="px-3 py-3">${r.cm}</td>
+                </tr>`).join('');
+            overlay.innerHTML = `
+                <div class="anim-pop max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:max-w-md sm:rounded-2xl sm:p-6">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">সাইজ চার্ট</h3>
+                            <p class="mt-1 text-xs text-gray-500">সাইজ বেছে নিতে সারিতে ট্যাপ করুন</p>
+                        </div>
+                        <button type="button" data-role="close" aria-label="বন্ধ করুন" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="mt-4 overflow-x-auto rounded-xl border border-gray-200">
+                        <table class="w-full text-center text-sm">
+                            <thead class="bg-gray-50 text-xs text-gray-500"><tr>
+                                <th class="px-3 py-2 font-medium">EU</th><th class="px-3 py-2 font-medium">UK</th><th class="px-3 py-2 font-medium">US</th><th class="px-3 py-2 font-medium">পায়ের মাপ (সেমি)</th>
+                            </tr></thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 rounded-xl bg-indigo-50 p-4 text-xs leading-6 text-gray-700">
+                        <p class="mb-1 font-semibold text-indigo-700">কীভাবে মাপবেন</p>
+                        <ul class="list-disc space-y-1 pl-4">
+                            <li>কাগজের ওপর পা রেখে গোড়ালি থেকে বড় আঙুলের মাথা পর্যন্ত দাগ দিন।</li>
+                            <li>দুই পা মাপুন এবং বড় মাপটি ধরুন।</li>
+                            <li>দুই সাইজের মাঝে পড়লে বড় সাইজটি নিন।</li>
+                        </ul>
+                    </div>
+                    <p class="mt-3 text-[11px] text-gray-400">চার্টটি আনুমানিক; ব্র্যান্ডভেদে সামান্য তফাত হতে পারে।</p>
+                </div>`;
+            const close = () => {
+                overlay.remove();
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', onKey);
+                if (opener && opener.focus) opener.focus();
+            };
+            const onKey = (ev) => { if (ev.key === 'Escape') close(); };
+            const pick = (tr) => { selectSize(tr.dataset.size); showToast(`সাইজ EU ${tr.dataset.size} নির্বাচন করা হয়েছে`, 'success'); close(); };
+            overlay.querySelectorAll('tbody tr').forEach((tr) => {
+                tr.addEventListener('click', () => pick(tr));
+                tr.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(tr); } });
+            });
+            overlay.querySelector('[data-role="close"]').addEventListener('click', close);
+            overlay.addEventListener('click', (ev) => { if (ev.target === overlay) close(); });
+            document.addEventListener('keydown', onKey);
+            document.body.style.overflow = 'hidden';
+            document.body.appendChild(overlay);
+            overlay.querySelector('[data-role="close"]').focus();
+        };
 
         // Mobile Scroll helper
         window.scrollToCheckout = () => {
             document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
         };
 
-        // WhatsApp order: prepares an order message with the selected product options.
-        // wa.me without a phone number opens WhatsApp's recipient picker.
-        window.orderViaWhatsApp = () => {
+        // দোকানের নম্বর (দেশ কোডসহ, শুধু অঙ্ক), যেমন: '8801712345678'
+        const WHATSAPP_NUMBER = '8801XXXXXXXXX';
+        // Facebook পেজের ইউজারনেম (facebook.com/ এর পরের অংশ), যেমন: 'myshop.bd'
+        const MESSENGER_PAGE = 'YOUR_PAGE_USERNAME';
+
+        const buildOrderMessage = () => {
+            const val = (id) => document.getElementById(id).value.trim();
             const subtotal = BASE_PRICE * quantity;
             const total = Math.max(0, subtotal + shippingCost - discount);
-            const couponLine = appliedCoupon ? `\nকুপন: ${appliedCoupon} (ছাড় ${formatCurrency(discount)})` : '';
-            const message = [
+            const lines = [
                 'আসসালামু আলাইকুম, আমি এই পণ্যটি অর্ডার করতে চাই।',
                 '',
                 'পণ্য: Nike Air Zoom Pegasus 39',
                 `সাইজ: ${selectedSize} (EU)`,
-                `পরিমাণ: ${quantity} টি`,
+                `পরিমাণ: ${bn(quantity)} টি`,
                 `পণ্যের মূল্য: ${formatCurrency(subtotal)}`,
-                `ডেলিভারি চার্জ: ${formatCurrency(shippingCost)}`,
-                `সর্বমোট: ${formatCurrency(total)}${couponLine}`,
-                '',
-                'অনুগ্রহ করে অর্ডারটি নিশ্চিত করতে সাহায্য করুন।'
-            ].join('\n');
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+                `ডেলিভারি চার্জ: ${formatCurrency(shippingCost)}`
+            ];
+            if (appliedCoupon) lines.push(`কুপন: ${appliedCoupon} (ছাড় ${formatCurrency(discount)})`);
+            lines.push(`সর্বমোট: ${formatCurrency(total)}`, '');
+            if (val('fullName')) lines.push(`নাম: ${val('fullName')}`);
+            if (val('phone')) lines.push(`মোবাইল: ${val('phone')}`);
+            if (val('address')) lines.push(`ঠিকানা: ${val('address')}`);
+            lines.push('অনুগ্রহ করে অর্ডারটি নিশ্চিত করতে সাহায্য করুন।');
+            return lines.join('\n');
+        };
+
+        window.orderViaWhatsApp = () => {
+            const hasNumber = /^[0-9]{11,15}$/.test(WHATSAPP_NUMBER);
+            const url = `https://wa.me/${hasNumber ? WHATSAPP_NUMBER : ''}?text=${encodeURIComponent(buildOrderMessage())}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
+        // Messenger লিংকে মেসেজ পাঠানো যায় না, তাই অর্ডারের তথ্য কপি করে চ্যাট খোলা হয়
+        const copyText = (text) => {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text).then(() => true).catch(() => false);
+            }
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+            ta.remove();
+            return Promise.resolve(ok);
+        };
+
+        window.orderViaMessenger = () => {
+            if (MESSENGER_PAGE === 'YOUR_PAGE_USERNAME') {
+                showToast('Messenger পেজের ইউজারনেম এখনও সেট করা হয়নি।', 'error');
+                return;
+            }
+            const copying = copyText(buildOrderMessage());
+            window.open(`https://m.me/${encodeURIComponent(MESSENGER_PAGE)}`, '_blank', 'noopener,noreferrer');
+            copying.then((ok) => {
+                showToast(ok ? 'অর্ডারের তথ্য কপি হয়েছে। মেসেঞ্জারে পেস্ট করে পাঠান।' : 'মেসেঞ্জারে আপনার অর্ডারের তথ্য লিখে পাঠান।');
+            });
         };
 
         // Toast Notification System
@@ -550,7 +685,7 @@
             const icon = type === 'success' ? '<i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>' 
                                             : '<i class="fas fa-exclamation-circle text-red-500 text-xl mr-3"></i>';
             
-            toast.className = `toast-enter flex items-center bg-white border ${type==='success'? 'border-green-200' : 'border-red-200'} shadow-lg rounded-lg p-4 mb-2 min-w-[300px]`;
+            toast.className = `toast-enter flex items-center bg-white border ${type==='success'? 'border-green-200' : 'border-red-200'} shadow-lg rounded-lg p-4 mb-2 w-full sm:w-auto sm:min-w-[300px]`;
             toast.innerHTML = `
                 ${icon}
                 <div>
@@ -570,64 +705,165 @@
         };
 
         // Form Submission
+        // TODO: এখানে আসল ব্যাকএন্ড/ইমেইল/Google Sheet এ orderData পাঠান। বর্তমানে শুধু সিমুলেশন।
+        const submitOrder = (orderData) => new Promise((resolve) => {
+            setTimeout(() => resolve('ORD-' + Math.floor(Math.random() * 1000000)), 1500);
+        });
+
         window.handleCheckout = (e) => {
             e.preventDefault();
-            
+            const form = e.target;
             const btn = document.getElementById('submit-btn');
+            if (btn.disabled) return;
+            const val = (id) => document.getElementById(id).value.trim();
+            const subtotal = BASE_PRICE * quantity;
+            const orderData = {
+                name: val('fullName'), phone: val('phone'), email: val('email'),
+                address: val('address'), area: val('city'), payment: 'cod',
+                size: selectedSize, quantity, subtotal, shipping: shippingCost,
+                coupon: appliedCoupon, discount, total: Math.max(0, subtotal + shippingCost - discount)
+            };
             const originalText = btn.innerHTML;
-            
-            // Loading state
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> অর্ডার প্রক্রিয়াকরণ হচ্ছে...';
             btn.classList.add('opacity-75', 'cursor-not-allowed');
 
-            // Simulate API call
-            setTimeout(() => {
-                const name = document.getElementById('fullName').value;
-                const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
-                
-                // Reset UI
+            submitOrder(orderData).then((orderId) => {
+                createSuccessOverlay(orderData.name, orderId);
+                form.reset();
+                quantity = 1;
+                document.getElementById('quantity').value = 1;
+                toggleCoupon(false);
+                appliedCoupon = null;
+                document.getElementById('coupon-message').classList.add('hidden');
+                updateShipping();
+            }).catch(() => {
+                showToast('অর্ডার সম্পন্ন করা যায়নি, আবার চেষ্টা করুন।', 'error');
+            }).finally(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalText;
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
-                
-                // Show Success
-                showToast(`অর্ডার সফলভাবে গ্রহণ করা হয়েছে! অর্ডার নম্বর: ${orderId}`);
-                
-                // Optional: Clear form or redirect
-                // e.target.reset();
-                // updateCalculations(); // Reset numbers
-                
-                // Create a nice success overlay instead of alert
-                createSuccessOverlay(name, orderId);
-
-            }, 1500);
+            });
         };
 
-        // Custom Success Message Overlay (Replacing alert)
         const createSuccessOverlay = (name, orderId) => {
             const overlay = document.createElement('div');
-            overlay.className = 'fixed inset-0 bg-gray-900 bg-opacity-50 z-[100] flex justify-center items-center backdrop-blur-sm px-4';
+            overlay.className = 'fixed inset-0 bg-gray-900 bg-opacity-50 z-[100] flex justify-center items-center backdrop-blur-sm px-4 anim-fade-in';
+            overlay.setAttribute('role', 'dialog');
+            overlay.setAttribute('aria-modal', 'true');
             overlay.innerHTML = `
-                <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl transform scale-100 transition-transform">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl anim-pop">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 anim-pop-delay">
                         <i class="fas fa-check text-4xl text-green-500"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">ধন্যবাদ, ${name.split(' ')[0]}!</h2>
-                    <p class="text-gray-600 mb-6">আপনার অর্ডার <span class="font-bold text-indigo-600">${orderId}</span> নিশ্চিত করা হয়েছে। শিগগিরই আপনাকে নিশ্চিতকরণ বার্তা পাঠানো হবে।</p>
-                    <button onclick="this.closest('.fixed').remove()" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-indigo-700 transition-colors">
-                        কেনাকাটা চালিয়ে যান
-                    </button>
-                </div>
-            `;
+                    <h2 data-role="thanks" class="text-2xl font-bold text-gray-900 mb-2"></h2>
+                    <p class="text-gray-600 mb-6">আপনার অর্ডার <span data-role="oid" class="font-bold text-indigo-600"></span> নিশ্চিত করা হয়েছে। শিগগিরই আপনাকে নিশ্চিতকরণ বার্তা পাঠানো হবে।</p>
+                    <button type="button" data-role="close" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-indigo-700 transition-colors">কেনাকাটা চালিয়ে যান</button>
+                </div>`;
+            overlay.querySelector('[data-role="thanks"]').textContent = `ধন্যবাদ, ${name.split(' ')[0]}!`;
+            overlay.querySelector('[data-role="oid"]').textContent = orderId;
+            const close = () => { overlay.remove(); document.removeEventListener('keydown', onKey); };
+            const onKey = (ev) => { if (ev.key === 'Escape') close(); };
+            overlay.querySelector('[data-role="close"]').addEventListener('click', close);
+            overlay.addEventListener('click', (ev) => { if (ev.target === overlay) close(); });
+            document.addEventListener('keydown', onKey);
             document.body.appendChild(overlay);
+            overlay.querySelector('[data-role="close"]').focus();
         };
+
+        // বাংলা অঙ্কে লেখা ফোন নম্বর ইংরেজি অঙ্কে রূপান্তর
+        document.getElementById('phone').addEventListener('input', (ev) => {
+            ev.target.value = ev.target.value.replace(/[০-৯]/g, (d) => '০১২৩৪৫৬৭৮৯'.indexOf(d));
+        });
+
+        // চেকআউট সেকশন দেখা গেলে স্টিকি বার লুকানো
+        (() => {
+            const bar = document.getElementById('sticky-order-bar');
+            const target = document.getElementById('checkout-section');
+            if (!('IntersectionObserver' in window)) return;
+            new IntersectionObserver(([entry]) => {
+                bar.classList.toggle('translate-y-full', entry.isIntersecting);
+                bar.inert = entry.isIntersecting;
+            }, { threshold: 0.15 }).observe(target);
+        })();
+
+        // স্ক্রলের সময় কার্ডগুলো ধাপে ধাপে ভেসে ওঠা
+        (() => {
+            if (!('IntersectionObserver' in window)) return;
+            const els = document.querySelectorAll('#product-section section .grid > div, #product-section .border-indigo-100 .space-y-3 > div');
+            const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+                if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
+            }), { threshold: 0.15 });
+            els.forEach((el, i) => { el.classList.add('reveal'); el.style.transitionDelay = ((i % 4) * 70) + 'ms'; io.observe(el); });
+        })();
 
         // Initialize calculations on load
         updateCalculations();
 
+        // ছবি বড় করে দেখা (লাইটবক্স): ট্যাপ/ক্লিকে জুম, স্ক্রল/ড্র্যাগে ঘুরে দেখা
+        window.openLightbox = () => {
+            if (document.getElementById('lightbox')) return;
+            resetZoom();
+            const main = document.getElementById('main-image');
+            const box = document.createElement('div');
+            box.id = 'lightbox';
+            box.className = 'fixed inset-0 z-[110] flex flex-col bg-black/90 anim-fade-in';
+            box.setAttribute('role', 'dialog');
+            box.setAttribute('aria-modal', 'true');
+            box.setAttribute('aria-label', 'পণ্যের ছবি');
+            box.innerHTML = `
+                <div class="flex items-center justify-between px-4 py-3 text-white">
+                    <p class="text-sm text-white/80">ট্যাপ করে জুম করুন, স্ক্রল করে ঘুরে দেখুন</p>
+                    <button type="button" data-role="close" aria-label="বন্ধ করুন" class="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-lg hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"><i class="fas fa-times"></i></button>
+                </div>
+                <div data-role="viewport" class="relative flex-1 overflow-auto">
+                    <div class="flex min-h-full min-w-full items-center justify-center">
+                        <img data-role="img" class="max-h-[calc(100dvh-4rem)] max-w-full cursor-zoom-in select-none object-contain">
+                    </div>
+                </div>`;
+            const vp = box.querySelector('[data-role="viewport"]');
+            const img = box.querySelector('[data-role="img"]');
+            img.alt = main.alt;
+            img.src = main.src.replace('w=900', 'w=1600');
+            let zoomed = false;
+
+            const close = () => {
+                box.remove();
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', onKey);
+                document.getElementById('image-container').focus();
+            };
+            const onKey = (ev) => { if (ev.key === 'Escape') close(); };
+
+            vp.addEventListener('click', (ev) => {
+                if (ev.target !== img) { if (!zoomed) close(); return; }
+                const rect = img.getBoundingClientRect();
+                const rx = (ev.clientX - rect.left) / rect.width;
+                const ry = (ev.clientY - rect.top) / rect.height;
+                zoomed = !zoomed;
+                if (zoomed) {
+                    img.style.maxWidth = 'none';
+                    img.style.maxHeight = 'none';
+                    img.style.width = (vp.clientWidth * 2.5) + 'px';
+                    img.classList.replace('cursor-zoom-in', 'cursor-zoom-out');
+                    vp.scrollLeft = img.offsetLeft + rx * img.offsetWidth - vp.clientWidth / 2;
+                    vp.scrollTop = img.offsetTop + ry * img.offsetHeight - vp.clientHeight / 2;
+                } else {
+                    img.style.maxWidth = img.style.maxHeight = img.style.width = '';
+                    img.classList.replace('cursor-zoom-out', 'cursor-zoom-in');
+                    vp.scrollTo(0, 0);
+                }
+            });
+            box.querySelector('[data-role="close"]').addEventListener('click', close);
+            document.addEventListener('keydown', onKey);
+            document.body.style.overflow = 'hidden';
+            document.body.appendChild(box);
+            box.querySelector('[data-role="close"]').focus();
+        };
+
         // Image Zoom Logic
         window.zoomImage = (e) => {
+            if (!window.matchMedia('(hover: hover)').matches) return;
             const container = document.getElementById('image-container');
             const img = document.getElementById('main-image');
             
