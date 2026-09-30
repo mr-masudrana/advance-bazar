@@ -80,6 +80,20 @@
         #coupon-chevron { transition: transform .2s ease; }
         #coupon-toggle[aria-expanded="true"] #coupon-chevron { transform: rotate(180deg); }
         #coupon-toggle[data-applied="true"] { color: #16a34a; }
+        .rv-track { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: .25rem .125rem 1rem; }
+        .rv-track::-webkit-scrollbar { display: none; }
+        .rv-track:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; border-radius: 1rem; }
+        .rv-card { flex: 0 0 88%; scroll-snap-align: start; }
+        @media (min-width: 640px) { .rv-card { flex-basis: calc((100% - 1rem) / 2); } }
+        @media (min-width: 1024px) { .rv-card { flex-basis: calc((100% - 2rem) / 3); } }
+        .rv-dot { display: block; height: .5rem; width: .5rem; border-radius: 9999px; background: #cbd5e1; transition: width .25s ease, background-color .25s ease; }
+        #rv-dots button[aria-current="true"] .rv-dot { width: 1.5rem; background: #4f46e5; }
+        .faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+        .faq-item.open .faq-a { grid-template-rows: 1fr; }
+        .faq-item.open { border-color: #c7d2fe; }
+        .faq-q i { transition: transform .25s ease; }
+        .faq-item.open .faq-q i { transform: rotate(45deg); }
+        @media (prefers-reduced-motion: reduce) { .rv-track { scroll-behavior: auto; } }
     </style>
 </head>
 <body class="text-gray-800 antialiased pb-24 lg:pb-0 min-h-screen flex flex-col">
@@ -102,6 +116,27 @@
             <div class="mx-auto w-full max-w-2xl lg:max-w-none lg:w-1/2 space-y-8 anim-fade-up" id="product-section">
                 
                 <div class="min-w-0 space-y-6">
+                <!-- পণ্যের টাইটেল ও সংক্ষিপ্ত বিবরণ -->
+                <div class="relative overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-4 shadow-sm sm:p-6">
+                    <div class="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-indigo-200/40 blur-2xl" aria-hidden="true"></div>
+                    <div class="pointer-events-none absolute -bottom-12 -left-8 h-32 w-32 rounded-full bg-violet-200/40 blur-2xl" aria-hidden="true"></div>
+                    <div class="relative">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="rounded-full bg-gray-900 px-3 py-1 text-xs font-extrabold tracking-[0.2em] text-white">NIKE</span>
+                            <span class="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">পুরুষদের দৌড়ানোর জুতা</span>
+                        </div>
+                        <h1 class="mt-3 bg-gradient-to-r from-gray-900 via-indigo-700 to-violet-600 bg-clip-text text-3xl font-extrabold leading-tight tracking-tight text-transparent sm:text-4xl lg:text-5xl">Nike Air Zoom Pegasus 39</h1>
+                        <div class="mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-600 to-violet-500" aria-hidden="true"></div>
+                        <p class="mt-3 text-sm leading-7 text-gray-600 sm:text-base">হালকা গঠন, বাতাস চলাচলের উপযোগী আপার ও আরামদায়ক কুশনিংয়ের রানিং শু, দৌড়ানো ও দৈনন্দিন ব্যবহারের জন্য।</p>
+                        <ul class="mt-4 flex flex-wrap gap-2">
+                        <li class="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm"><i class="fas fa-feather-alt text-indigo-500" aria-hidden="true"></i>হালকা গঠন</li>
+                        <li class="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm"><i class="fas fa-wind text-indigo-500" aria-hidden="true"></i>বাতাস চলাচল</li>
+                        <li class="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm"><i class="fas fa-shoe-prints text-indigo-500" aria-hidden="true"></i>আরামদায়ক কুশনিং</li>
+                        <li class="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm"><i class="fas fa-running text-indigo-500" aria-hidden="true"></i>দৌড় ও দৈনন্দিন ব্যবহার</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- পণ্য Image Gallery -->
                 <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-3 sm:p-6 flex justify-center items-center h-[300px] sm:h-[400px] md:h-[460px] lg:h-[500px] relative cursor-zoom-in group" id="image-container" role="button" tabindex="0" aria-label="ছবি বড় করে দেখুন" onkeydown="if(event.key==='Enter')openLightbox()" onmousemove="zoomImage(event)" onmouseleave="resetZoom()" onclick="openLightbox()">
                     <img id="main-image" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85" alt="রানিং জুতা" class="object-contain w-full h-full transition duration-200" onerror="this.onerror=null;this.src='https://placehold.co/600x600/f1f5f9/334155?text=Shoe';">
@@ -130,35 +165,25 @@
                     </button>
                 </div>
 
+                <!-- হাইলাইট করা দাম -->
+                <div id="price-card" class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 p-4 text-white shadow-lg shadow-indigo-200 sm:p-5">
+                    <div class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10" aria-hidden="true"></div>
+                    <p class="text-xs font-medium tracking-wide text-indigo-100">বিশেষ অফার মূল্য</p>
+                    <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+                        <p class="text-3xl font-extrabold sm:text-4xl">৳১২,৫০০</p>
+                        <span class="text-base text-indigo-200 line-through">৳১৪,০০০</span>
+                        <span class="rounded-full bg-white px-3 py-1 text-sm font-bold text-red-600">১১% ছাড়</span>
+                    </div>
+                    <p class="mt-2 inline-flex items-center gap-2 text-sm font-medium text-emerald-200"><i class="fas fa-piggy-bank" aria-hidden="true"></i> আপনি সাশ্রয় করছেন ৳১,৫০০</p>
+                </div>
+
                 </div>
 
                 <!-- পণ্য Info -->
                 <div class="min-w-0 space-y-4">
                     <div class="flex flex-col space-y-2">
                         <div>
-                            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">Nike Air Zoom Pegasus 39</h1>
-                            <p class="text-lg text-gray-500 mt-1">পুরুষদের দৌড়ানোর জুতা</p>
-                        </div>
-                        <div>
-                            <div class="flex flex-wrap items-center gap-3">
-                                <p class="text-2xl sm:text-3xl font-bold text-indigo-600">৳১২,৫০০ <span class="text-base text-gray-400 line-through ml-2 font-normal">৳১৪,০০০</span></p>
-                                <span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-bold text-red-700">১১% ছাড়</span>
-                            </div>
-                            <p class="text-sm text-green-700 mt-1">আপনি সাশ্রয় করছেন ৳১,৫০০</p>
-                            <div class="mt-4" id="size-selector">
-                                <div class="flex items-center justify-between gap-3">
-                                    <p id="size-label" class="text-sm font-semibold text-gray-900">সাইজ (EU): <span id="size-current" class="text-indigo-600">41</span></p>
-                                    <button type="button" onclick="openSizeChart()" class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-800"><i class="fas fa-ruler" aria-hidden="true"></i> সাইজ চার্ট</button>
-                                </div>
-                                <div class="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-labelledby="size-label">
-                                    <button type="button" role="radio" aria-checked="false" data-size="40" onclick="selectSize('40')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">40</button>
-                                    <button type="button" role="radio" aria-checked="false" data-size="41" onclick="selectSize('41')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">41</button>
-                                    <button type="button" role="radio" aria-checked="false" data-size="42" onclick="selectSize('42')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">42</button>
-                                    <button type="button" role="radio" aria-checked="false" data-size="43" onclick="selectSize('43')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">43</button>
-                                    <button type="button" role="radio" aria-checked="false" data-size="44" onclick="selectSize('44')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">44</button>
-                                </div>
-                            </div>
-                            <div class="mt-4 grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                            <div class="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                                 <button type="button" onclick="orderViaWhatsApp()" class="inline-flex w-full items-center justify-center rounded-xl bg-green-600 px-6 py-3 font-semibold text-white shadow-md shadow-green-200 transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                                     <i class="fab fa-whatsapp mr-2 text-xl" aria-hidden="true"></i>
                                     <span>হোয়াটসঅ্যাপে অর্ডার করুন</span>
@@ -166,6 +191,10 @@
                                 <button type="button" onclick="orderViaMessenger()" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-md shadow-blue-200 transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                     <i class="fab fa-facebook-messenger mr-2 text-xl" aria-hidden="true"></i>
                                     <span>মেসেঞ্জারে অর্ডার করুন</span>
+                                </button>
+                                <button type="button" onclick="orderViaCall()" class="inline-flex w-full items-center justify-center rounded-xl bg-gray-900 px-6 py-3 font-semibold text-white shadow-md shadow-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 sm:col-span-2 lg:col-span-1 xl:col-span-2">
+                                    <i class="fas fa-phone mr-2 text-lg" aria-hidden="true"></i>
+                                    <span>Call করে অর্ডার করুন</span>
                                 </button>
                             </div>
                         </div>
@@ -186,12 +215,6 @@
                         </div>
                         <div class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
                             <p class="text-sm sm:text-base leading-7 text-gray-600">Nike Air Zoom Pegasus 39 একটি রানিং শু, যা দৌড়ানো, হাঁটাহাঁটি ও দৈনন্দিন ব্যবহারে আরামদায়ক অনুভূতি দেওয়ার জন্য ডিজাইন করা হয়েছে। হালকা গঠন, পায়ে বাতাস চলাচলে সহায়ক উপরের অংশ এবং কুশনিং প্রযুক্তি প্রতিটি পদক্ষেপকে আরও স্বাচ্ছন্দ্যময় করতে সহায়তা করে।</p>
-                            <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-3"><i class="fas fa-wind mt-1 text-indigo-600"></i><div><p class="text-sm font-semibold text-gray-900">বাতাস চলাচল উপযোগী</p><p class="mt-1 text-xs leading-5 text-gray-600">মেশ আপার পায়ের ভেতরে বাতাস চলাচলে সহায়তা করে।</p></div></div>
-                                <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-3"><i class="fas fa-shield-alt mt-1 text-indigo-600"></i><div><p class="text-sm font-semibold text-gray-900">মাঝের অংশে সাপোর্ট</p><p class="mt-1 text-xs leading-5 text-gray-600">Flywire প্রযুক্তি পায়ের মাঝের অংশে সাপোর্ট দিতে সহায়তা করে।</p></div></div>
-                                <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-3"><i class="fas fa-feather-alt mt-1 text-indigo-600"></i><div><p class="text-sm font-semibold text-gray-900">মসৃণ কুশনিং</p><p class="mt-1 text-xs leading-5 text-gray-600">Nike React প্রযুক্তি আরামদায়ক ও সাড়া-দেওয়া পদক্ষেপে সহায়তা করে।</p></div></div>
-                                <div class="flex items-start gap-3 rounded-xl bg-slate-50 p-3"><i class="fas fa-bolt mt-1 text-indigo-600"></i><div><p class="text-sm font-semibold text-gray-900">Zoom Air ইউনিট</p><p class="mt-1 text-xs leading-5 text-gray-600">সামনের ও গোড়ালির অংশে কুশনিংয়ের জন্য Zoom Air ইউনিট রয়েছে।</p></div></div>
-                            </div>
                             <div class="mt-5 border-t border-gray-100 pt-4">
                                 <h4 class="text-sm font-bold text-gray-900 mb-3">পণ্যের সংক্ষিপ্ত তথ্য</h4>
                                 <dl class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
@@ -205,32 +228,79 @@
                         </div>
                     </section>
 
-                    <!-- Why Shop With Us (Bangla) -->
-                    <div class="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-5">
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">কেন আমাদের থেকে প্রোডাক্ট কিনবেন?</h3>
-                        <div class="space-y-3 text-sm text-gray-700">
-                            <div class="flex items-start gap-3">
-                                <i class="fas fa-check-circle text-indigo-600 mt-0.5"></i>
-                                <div><p class="font-semibold text-gray-900">সহজ অর্ডার প্রক্রিয়া</p><p>প্রয়োজনীয় তথ্য দিয়ে কয়েকটি ধাপেই অর্ডার সম্পন্ন করতে পারবেন।</p></div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <i class="fas fa-ruler-combined text-indigo-600 mt-0.5"></i>
-                                <div><p class="font-semibold text-gray-900">নিজের পছন্দমতো সাইজ</p><p>প্রোডাক্টের দামের নিচ থেকে সাইজ বেছে নিন, চাইলে সাইজ চার্ট দেখুন।</p></div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <i class="fas fa-truck text-indigo-600 mt-0.5"></i>
-                                <div><p class="font-semibold text-gray-900">ডেলিভারি চার্জ আগে থেকেই দেখুন</p><p>ঢাকার ভেতর ও বাইরের জন্য প্রযোজ্য ডেলিভারি চার্জসহ মোট মূল্য চেকআউটে দেখতে পারবেন।</p></div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <i class="fas fa-money-bill-wave text-indigo-600 mt-0.5"></i>
-                                <div><p class="font-semibold text-gray-900">ক্যাশ অন ডেলিভারি</p><p>বর্তমানে পণ্য হাতে পাওয়ার সময় মূল্য পরিশোধের অপশন রয়েছে।</p></div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <i class="fas fa-tags text-indigo-600 mt-0.5"></i>
-                                <div><p class="font-semibold text-gray-900">কুপন ব্যবহারের সুযোগ</p><p>প্রযোজ্য কুপন কোড ব্যবহার করে অর্ডারে ছাড় পাওয়ার সুযোগ নিন।</p></div>
+                    <!-- কেন এই জুতোটি সেরা চয়েস? -->
+                    <section class="mt-6" aria-labelledby="best-choice-title">
+                        <div class="mb-4 flex items-center gap-3">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600"><i class="fas fa-medal text-xl" aria-hidden="true"></i></div>
+                            <div>
+                                <h3 id="best-choice-title" class="text-xl font-bold text-gray-900">কেন এই জুতোটি সেরা চয়েস?</h3>
+                                <p class="text-sm text-gray-500">যেসব কারণে Pegasus 39 আলাদা</p>
                             </div>
                         </div>
-                    </div>
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-wind" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">বাতাস চলাচল উপযোগী</p><p class="mt-1 text-sm leading-6 text-gray-600">মেশ আপার পায়ের ভেতর বাতাস চলাচলে সহায়তা করে।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">মাঝের অংশে সাপোর্ট</p><p class="mt-1 text-sm leading-6 text-gray-600">Flywire প্রযুক্তি পায়ের মাঝের অংশে সাপোর্ট দিতে সহায়তা করে।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-feather-alt" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">মসৃণ কুশনিং</p><p class="mt-1 text-sm leading-6 text-gray-600">Nike React প্রযুক্তি আরামদায়ক ও সাড়া-দেওয়া পদক্ষেপে সহায়তা করে।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">Zoom Air ইউনিট</p><p class="mt-1 text-sm leading-6 text-gray-600">সামনের ও গোড়ালির অংশে কুশনিংয়ের জন্য Zoom Air ইউনিট রয়েছে।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-feather" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">হালকা গঠন</p><p class="mt-1 text-sm leading-6 text-gray-600">হালকা গঠনের কারণে দৌড়ানো ও হাঁটাহাঁটিতে স্বাচ্ছন্দ্য পেতে সহায়তা করে।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-running" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">দৌড় ও দৈনন্দিন ব্যবহার</p><p class="mt-1 text-sm leading-6 text-gray-600">দৌড়ানো, হাঁটাহাঁটি ও দৈনন্দিন চলাচল, সব ব্যবহারেই আরামের কথা ভেবে তৈরি।</p></div>
+                        </div>
+                        </div>
+                    </section>
+
+                    <!-- আমাদের থেকে কেন কিনবেন? (ডেলিভারি চার্জ বদলালে FAQ-তেও বদলান) -->
+                    <section class="mt-6 rounded-2xl border border-green-100 bg-green-50/60 p-4 sm:p-5" aria-labelledby="why-us-title">
+                        <div class="mb-4 flex items-center gap-3">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-store" aria-hidden="true"></i></div>
+                            <div>
+                                <h3 id="why-us-title" class="text-xl font-bold text-gray-900">আমাদের থেকে কেন কিনবেন?</h3>
+                                <p class="text-sm text-gray-500">অর্ডার থেকে ডেলিভারি, সহজ ও স্বচ্ছ</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">সহজ অর্ডার প্রক্রিয়া</p><p class="mt-1 text-sm leading-6 text-gray-600">প্রয়োজনীয় তথ্য দিয়ে কয়েকটি ধাপেই অর্ডার সম্পন্ন করতে পারবেন।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-ruler-combined" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">নিজের পছন্দমতো সাইজ</p><p class="mt-1 text-sm leading-6 text-gray-600">সাইজ চার্ট দেখে নিশ্চিন্তে নিজের সাইজ বেছে নিন।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-truck" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">ডেলিভারি চার্জ আগেই জানুন</p><p class="mt-1 text-sm leading-6 text-gray-600">ঢাকার ভেতর ও বাইরের ডেলিভারি চার্জসহ মোট মূল্য চেকআউটে দেখতে পারবেন।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-money-bill-wave" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">ক্যাশ অন ডেলিভারি</p><p class="mt-1 text-sm leading-6 text-gray-600">পণ্য হাতে পাওয়ার সময় মূল্য পরিশোধের সুবিধা রয়েছে।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-tags" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">কুপনে ছাড়</p><p class="mt-1 text-sm leading-6 text-gray-600">প্রযোজ্য কুপন কোড ব্যবহার করে অর্ডারে ছাড় পান।</p></div>
+                        </div>
+                        <div class="reveal-item flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600"><i class="fas fa-headset" aria-hidden="true"></i></div>
+                            <div><p class="text-sm font-semibold text-gray-900">সরাসরি যোগাযোগ</p><p class="mt-1 text-sm leading-6 text-gray-600">হোয়াটসঅ্যাপ, মেসেঞ্জার ও ফোন কলে সরাসরি অর্ডার করা ও প্রশ্ন করার সুযোগ।</p></div>
+                        </div>
+                        </div>
+                    </section>
 
                 </div>
             </div>
@@ -240,75 +310,6 @@
                     <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                         <i class="fas fa-lock text-green-500 mr-2 text-xl"></i> নিরাপদে অর্ডার করুন
                     </h2>
-
-                    <!-- Order Summary -->
-                    <div class="bg-gray-50 rounded-xl p-4 mb-8">
-                        <h3 class="text-sm font-semibold text-gray-700 tracking-wider mb-4">অর্ডার সামারি</h3>
-                        
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="flex min-w-0 flex-1 items-center">
-                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=80" alt="জুতা" class="w-12 h-12 shrink-0 rounded bg-white object-cover border border-gray-200" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe'">
-                                <div class="ml-3 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900">Nike Air Zoom Pegasus 39</p>
-                                    <p class="text-xs text-gray-600 mt-1" id="summary-details">সাইজ: EU 41</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Quantity Control -->
-                            <div class="flex shrink-0 items-center border border-gray-300 rounded-lg bg-white">
-                                <button type="button" onclick="updateQuantity(-1)" aria-label="পরিমাণ কমান" class="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-100 rounded-l-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-                                    <i class="fas fa-minus text-xs"></i>
-                                </button>
-                                <input type="number" id="quantity" aria-label="পরিমাণ" value="1" min="1" max="10" class="w-8 text-center text-sm font-medium text-gray-900 focus:outline-none bg-transparent" readonly>
-                                <button type="button" onclick="updateQuantity(1)" aria-label="পরিমাণ বাড়ান" class="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-100 rounded-r-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-                                    <i class="fas fa-plus text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between text-gray-600">
-                                <span>পণ্যের মোট মূল্য</span>
-                                <span id="subtotal" class="font-medium">৳১২,৫০০</span>
-                            </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>ডেলিভারি চার্জ</span>
-                                <span id="shipping-cost" class="font-medium">৳৬০</span>
-                            </div>
-                            <!-- Discount display row (hidden by default) -->
-                            <div id="discount-row" class="flex justify-between text-green-600 hidden">
-                                <span>ছাড় (<span id="applied-coupon-name"></span>)</span>
-                                <span id="discount-amount" class="font-medium">-৳০</span>
-                            </div>
-                            <div class="border-t border-gray-200 pt-2 mt-2">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-base font-bold text-gray-900">সর্বমোট</span>
-                                    <span id="total-price" class="text-lg font-bold text-indigo-600">৳১২,৫৬০</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Coupon Code Section (বাটনে ক্লিক করলে খুলবে) -->
-                        <div class="mt-4 border-t border-gray-200 pt-3">
-                            <button type="button" id="coupon-toggle" onclick="toggleCoupon()" aria-expanded="false" aria-controls="coupon-panel" class="flex w-full items-center justify-between py-1 text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus-visible:underline">
-                                <span class="inline-flex items-center gap-2"><i class="fas fa-tag" aria-hidden="true"></i><span id="coupon-toggle-label">কুপন কোড আছে?</span></span>
-                                <i id="coupon-chevron" class="fas fa-chevron-down text-xs" aria-hidden="true"></i>
-                            </button>
-                            <div id="coupon-panel" class="coupon-panel" inert>
-                                <div class="overflow-hidden">
-                                    <div class="px-0.5 pb-0.5 pt-3">
-                                        <label for="coupon" class="sr-only">কুপন কোড</label>
-                                        <div class="flex space-x-2">
-                                            <input type="text" id="coupon" class="min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-base sm:text-sm uppercase" placeholder="কুপন কোড লিখুন">
-                                            <button type="button" onclick="applyCoupon()" class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">প্রয়োগ করুন</button>
-                                        </div>
-                                        <p id="coupon-message" class="text-xs mt-2 hidden"></p>
-                                        <button type="button" id="remove-coupon" onclick="removeCoupon()" class="hidden mt-2 text-xs font-medium text-red-600 underline">কুপন সরান</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Checkout Form -->
                     <form id="checkout-form" onsubmit="handleCheckout(event)">
@@ -365,8 +366,92 @@
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
-                        <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 flex justify-center items-center relative overflow-hidden group">
+                        </form>
+
+                    <!-- Order Summary -->
+                    <div class="bg-gray-50 rounded-xl p-4 mb-8">
+                        <h3 class="text-sm font-semibold text-gray-700 tracking-wider mb-4">অর্ডার সামারি</h3>
+                        
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="flex min-w-0 flex-1 items-center">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=80" alt="জুতা" class="w-12 h-12 shrink-0 rounded bg-white object-cover border border-gray-200" onerror="this.onerror=null;this.src='https://placehold.co/150x150/f1f5f9/334155?text=Shoe'">
+                                <div class="ml-3 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Nike Air Zoom Pegasus 39</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Quantity Control -->
+                            <div class="flex shrink-0 items-center border border-gray-300 rounded-lg bg-white">
+                                <button type="button" onclick="updateQuantity(-1)" aria-label="পরিমাণ কমান" class="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-100 rounded-l-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <input type="number" id="quantity" aria-label="পরিমাণ" value="1" min="1" max="10" class="w-8 text-center text-sm font-medium text-gray-900 focus:outline-none bg-transparent" readonly>
+                                <button type="button" onclick="updateQuantity(1)" aria-label="পরিমাণ বাড়ান" class="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-100 rounded-r-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 border-t border-gray-200 pt-3" id="size-selector">
+                                <div class="flex items-center justify-between gap-3">
+                                    <p id="size-label" class="text-sm font-semibold text-gray-900">সাইজ (EU): <span id="size-current" class="text-indigo-600">41</span></p>
+                                    <button type="button" onclick="openSizeChart()" class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-800"><i class="fas fa-ruler" aria-hidden="true"></i> সাইজ চার্ট</button>
+                                </div>
+                                <div class="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-labelledby="size-label">
+                                    <button type="button" role="radio" aria-checked="false" data-size="40" onclick="selectSize('40')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">40</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="41" onclick="selectSize('41')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">41</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="42" onclick="selectSize('42')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">42</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="43" onclick="selectSize('43')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">43</button>
+                                    <button type="button" role="radio" aria-checked="false" data-size="44" onclick="selectSize('44')" class="size-btn h-11 min-w-[3.25rem] rounded-lg border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-800 hover:border-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">44</button>
+                                </div>
+                            </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between text-gray-600">
+                                <span>পণ্যের মোট মূল্য</span>
+                                <span id="subtotal" class="font-medium">৳১২,৫০০</span>
+                            </div>
+                            <div class="flex justify-between text-gray-600">
+                                <span>ডেলিভারি চার্জ</span>
+                                <span id="shipping-cost" class="font-medium">৳৬০</span>
+                            </div>
+                            <!-- Discount display row (hidden by default) -->
+                            <div id="discount-row" class="flex justify-between text-green-600 hidden">
+                                <span>ছাড় (<span id="applied-coupon-name"></span>)</span>
+                                <span id="discount-amount" class="font-medium">-৳০</span>
+                            </div>
+                            <div class="border-t border-gray-200 pt-2 mt-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-base font-bold text-gray-900">সর্বমোট</span>
+                                    <span id="total-price" class="text-lg font-bold text-indigo-600">৳১২,৫৬০</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coupon Code Section (বাটনে ক্লিক করলে খুলবে) -->
+                        <div class="mt-4 border-t border-gray-200 pt-3">
+                            <button type="button" id="coupon-toggle" onclick="toggleCoupon()" aria-expanded="false" aria-controls="coupon-panel" class="flex w-full items-center justify-between py-1 text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus-visible:underline">
+                                <span class="inline-flex items-center gap-2"><i class="fas fa-tag" aria-hidden="true"></i><span id="coupon-toggle-label">কুপন কোড আছে?</span></span>
+                                <i id="coupon-chevron" class="fas fa-chevron-down text-xs" aria-hidden="true"></i>
+                            </button>
+                            <div id="coupon-panel" class="coupon-panel" inert>
+                                <div class="overflow-hidden">
+                                    <div class="px-0.5 pb-0.5 pt-3">
+                                        <label for="coupon" class="sr-only">কুপন কোড</label>
+                                        <div class="flex space-x-2">
+                                            <input type="text" id="coupon" class="min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-base sm:text-sm uppercase" placeholder="কুপন কোড লিখুন">
+                                            <button type="button" onclick="applyCoupon()" class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">প্রয়োগ করুন</button>
+                                        </div>
+                                        <p id="coupon-message" class="text-xs mt-2 hidden"></p>
+                                        <button type="button" id="remove-coupon" onclick="removeCoupon()" class="hidden mt-2 text-xs font-medium text-red-600 underline">কুপন সরান</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                        <button type="submit" form="checkout-form" id="submit-btn" class="w-full bg-indigo-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 flex justify-center items-center relative overflow-hidden group">
                             <span class="relative z-10 flex items-center">
                                 অর্ডার নিশ্চিত করুন <i class="fas fa-check-circle ml-2"></i>
                             </span>
@@ -375,20 +460,70 @@
                         <p class="text-center text-xs text-gray-500 mt-4 flex items-center justify-center">
                             <i class="fas fa-shield-alt mr-1"></i> আপনার তথ্য নিরাপদে রাখা হবে।
                         </p>
-                    </form>
                 </div>
             </div>
         </div>
+        <!-- কাস্টমার রিভিউ ক্যারোসেল -->
+        <section id="reviews" class="mt-12 sm:mt-16" aria-labelledby="reviews-title">
+            <div class="mx-auto max-w-2xl lg:max-w-none" id="rv-wrap">
+                <div class="mb-4 flex items-end justify-between gap-4">
+                    <div>
+                        <h2 id="reviews-title" class="text-2xl font-bold text-gray-900">কাস্টমার রিভিউ</h2>
+                        <p class="mt-1 text-sm text-gray-500">ক্রেতারা কী বলছেন</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="rv-toggle" aria-pressed="true" aria-label="অটো-স্লাইড বন্ধ করুন" class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"><i class="fas fa-pause text-xs" aria-hidden="true"></i></button>
+                        <button type="button" id="rv-prev" aria-label="আগের রিভিউ" class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"><i class="fas fa-chevron-left text-xs" aria-hidden="true"></i></button>
+                        <button type="button" id="rv-next" aria-label="পরের রিভিউ" class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"><i class="fas fa-chevron-right text-xs" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div id="rv-track" class="rv-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="কাস্টমার রিভিউ"></div>
+                <div id="rv-dots" class="mt-3 flex flex-wrap justify-center" aria-label="রিভিউ নির্বাচন"></div>
+            </div>
+        </section>
+
+        <!-- সাধারণ প্রশ্ন ও উত্তর (উত্তরগুলো আপনার আসল নীতি অনুযায়ী বদলে নিন) -->
+        <section id="faq" class="mt-12 sm:mt-16" aria-labelledby="faq-title">
+            <div class="mx-auto max-w-2xl lg:max-w-3xl">
+                <div class="mb-5 text-center">
+                    <h2 id="faq-title" class="text-2xl font-bold text-gray-900">সাধারণ প্রশ্ন ও উত্তর</h2>
+                    <p class="mt-1 text-sm text-gray-500">অর্ডারের আগে যা জানতে চান</p>
+                </div>
+                <div class="space-y-3" id="faq-list">
+                    <div class="faq-item reveal-item rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <button type="button" id="faq-q1" aria-expanded="false" aria-controls="faq-a1" class="faq-q flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-base"><span>কীভাবে অর্ডার করব?</span><i class="fas fa-plus shrink-0 text-indigo-600" aria-hidden="true"></i></button>
+                        <div id="faq-a1" class="faq-a" role="region" aria-labelledby="faq-q1" inert><div class="overflow-hidden"><p class="px-4 pb-4 text-sm leading-7 text-gray-600">"নিরাপদে অর্ডার করুন" অংশে নাম, মোবাইল নম্বর ও ঠিকানা দিন, অর্ডার সামারিতে সাইজ বেছে নিয়ে "অর্ডার নিশ্চিত করুন" চাপুন। চাইলে হোয়াটসঅ্যাপ, মেসেঞ্জার বা ফোন কলেও অর্ডার করতে পারবেন।</p></div></div>
+                    </div>
+                    <div class="faq-item reveal-item rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <button type="button" id="faq-q2" aria-expanded="false" aria-controls="faq-a2" class="faq-q flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-base"><span>ডেলিভারি চার্জ কত?</span><i class="fas fa-plus shrink-0 text-indigo-600" aria-hidden="true"></i></button>
+                        <div id="faq-a2" class="faq-a" role="region" aria-labelledby="faq-q2" inert><div class="overflow-hidden"><p class="px-4 pb-4 text-sm leading-7 text-gray-600">ঢাকার ভেতরে ৳৬০ এবং ঢাকার বাইরে ৳১২০। এলাকা বাছাই করলেই মোট মূল্যে চার্জ যোগ হয়ে দেখানো হয়।</p></div></div>
+                    </div>
+                    <div class="faq-item reveal-item rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <button type="button" id="faq-q3" aria-expanded="false" aria-controls="faq-a3" class="faq-q flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-base"><span>পেমেন্ট কীভাবে করব?</span><i class="fas fa-plus shrink-0 text-indigo-600" aria-hidden="true"></i></button>
+                        <div id="faq-a3" class="faq-a" role="region" aria-labelledby="faq-q3" inert><div class="overflow-hidden"><p class="px-4 pb-4 text-sm leading-7 text-gray-600">বর্তমানে ক্যাশ অন ডেলিভারি চালু আছে, অর্থাৎ পণ্য হাতে পেয়ে মূল্য পরিশোধ করবেন। বিকাশ পেমেন্ট শীঘ্রই আসছে।</p></div></div>
+                    </div>
+                    <div class="faq-item reveal-item rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <button type="button" id="faq-q4" aria-expanded="false" aria-controls="faq-a4" class="faq-q flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-base"><span>আমার সাইজ কীভাবে বুঝব?</span><i class="fas fa-plus shrink-0 text-indigo-600" aria-hidden="true"></i></button>
+                        <div id="faq-a4" class="faq-a" role="region" aria-labelledby="faq-q4" inert><div class="overflow-hidden"><p class="px-4 pb-4 text-sm leading-7 text-gray-600">অর্ডার সামারিতে সাইজের পাশের "সাইজ চার্ট" বাটনে চাপুন। পায়ের মাপ সেমিতে দেওয়া আছে। দুই সাইজের মাঝামাঝি হলে বড় সাইজটি নিন। দ্বিধা থাকলে হোয়াটসঅ্যাপ বা মেসেঞ্জারে আমাদের জিজ্ঞেস করুন।</p></div></div>
+                    </div>
+                    <div class="faq-item reveal-item rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <button type="button" id="faq-q5" aria-expanded="false" aria-controls="faq-a5" class="faq-q flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-base"><span>কুপন কোড কীভাবে ব্যবহার করব?</span><i class="fas fa-plus shrink-0 text-indigo-600" aria-hidden="true"></i></button>
+                        <div id="faq-a5" class="faq-a" role="region" aria-labelledby="faq-q5" inert><div class="overflow-hidden"><p class="px-4 pb-4 text-sm leading-7 text-gray-600">অর্ডার সামারির "কুপন কোড আছে?" বাটনে চাপুন, কোড লিখে "প্রয়োগ করুন" চাপুন। ছাড়ের পরিমাণ সঙ্গে সঙ্গে মোট মূল্যে দেখতে পাবেন।</p></div></div>
+                    </div>
+                    <div class="faq-item reveal-item rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <button type="button" id="faq-q6" aria-expanded="false" aria-controls="faq-a6" class="faq-q flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-base"><span>একসঙ্গে কয়জোড়া অর্ডার করা যায়?</span><i class="fas fa-plus shrink-0 text-indigo-600" aria-hidden="true"></i></button>
+                        <div id="faq-a6" class="faq-a" role="region" aria-labelledby="faq-q6" inert><div class="overflow-hidden"><p class="px-4 pb-4 text-sm leading-7 text-gray-600">একটি অর্ডারে সর্বোচ্চ ১০ জোড়া পর্যন্ত অর্ডার করা যায়। পরিমাণ অর্ডার সামারি থেকে কমাতে বা বাড়াতে পারবেন।</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- শুধু মোবাইলে স্টিকি অর্ডার বার -->
     <div id="sticky-order-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-4px_12px_rgba(0,0,0,0.08)] backdrop-blur anim-slide-up transition-transform duration-200">
-        <div class="mx-auto flex max-w-md items-center gap-4">
-            <div class="shrink-0">
-                <p class="text-xs text-gray-500">সর্বমোট</p>
-                <p id="sticky-total" class="text-lg font-bold text-indigo-600">৳১২,৫৬০</p>
-            </div>
-            <button type="button" onclick="scrollToCheckout()" class="inline-flex flex-1 items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow-md shadow-indigo-200 transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">অর্ডার করুন</button>
+        <div class="mx-auto max-w-md">
+            <button type="button" onclick="scrollToCheckout()" class="inline-flex w-full items-center justify-center rounded-xl bg-indigo-600 px-5 py-3.5 text-base font-bold text-white shadow-lg shadow-indigo-200 transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">এখনই অর্ডার করুন <i class="fas fa-arrow-right ml-2" aria-hidden="true"></i></button>
         </div>
     </div>
 
@@ -451,7 +586,7 @@
             document.getElementById('coupon-toggle-label').innerText = appliedCoupon ? `কুপন প্রয়োগ হয়েছে: ${appliedCoupon}` : 'কুপন কোড আছে?';
             document.getElementById('coupon-toggle').dataset.applied = appliedCoupon ? 'true' : 'false';
             setAnimated('total-price', formatCurrency(total));
-            setAnimated('sticky-total', formatCurrency(total));
+            
         };
 
         window.toggleCoupon = (forceOpen) => {
@@ -531,14 +666,14 @@
             });
         };
 
-        // সাইজ নির্বাচন (প্রোডাক্টের দামের নিচে)। অর্ডার সামারিতে শুধু দেখানো হয়।
+        // সাইজ নির্বাচন (অর্ডার সামারিতে, প্রোডাক্টের নিচে)
         window.selectSize = (size) => {
             selectedSize = String(size);
             document.querySelectorAll('.size-btn').forEach((b) => {
                 b.setAttribute('aria-checked', b.dataset.size === selectedSize ? 'true' : 'false');
             });
             document.getElementById('size-current').innerText = selectedSize;
-            document.getElementById('summary-details').innerText = `সাইজ: EU ${selectedSize}`;
+            
         };
         selectSize(selectedSize);
 
@@ -619,6 +754,8 @@
         const WHATSAPP_NUMBER = '8801XXXXXXXXX';
         // Facebook পেজের ইউজারনেম (facebook.com/ এর পরের অংশ), যেমন: 'myshop.bd'
         const MESSENGER_PAGE = 'YOUR_PAGE_USERNAME';
+        // অর্ডারের জন্য ফোন নম্বর, যেমন: '01712345678' বা '+8801712345678'
+        const CALL_NUMBER = '01XXXXXXXXX';
 
         const buildOrderMessage = () => {
             const val = (id) => document.getElementById(id).value.trim();
@@ -646,6 +783,15 @@
             const hasNumber = /^[0-9]{11,15}$/.test(WHATSAPP_NUMBER);
             const url = `https://wa.me/${hasNumber ? WHATSAPP_NUMBER : ''}?text=${encodeURIComponent(buildOrderMessage())}`;
             window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
+        window.orderViaCall = () => {
+            const num = CALL_NUMBER.replace(/[\s-]/g, '');
+            if (!/^\+?[0-9]{10,15}$/.test(num)) {
+                showToast('কল করার ফোন নম্বর এখনও সেট করা হয়নি।', 'error');
+                return;
+            }
+            window.location.href = `tel:${num}`;
         };
 
         // Messenger লিংকে মেসেজ পাঠানো যায় না, তাই অর্ডারের তথ্য কপি করে চ্যাট খোলা হয়
@@ -771,6 +917,11 @@
             overlay.querySelector('[data-role="close"]').focus();
         };
 
+        // কুপন ইনপুটে Enter চাপলে কুপন প্রয়োগ
+        document.getElementById('coupon').addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter') { ev.preventDefault(); applyCoupon(); }
+        });
+
         // বাংলা অঙ্কে লেখা ফোন নম্বর ইংরেজি অঙ্কে রূপান্তর
         document.getElementById('phone').addEventListener('input', (ev) => {
             ev.target.value = ev.target.value.replace(/[০-৯]/g, (d) => '০১২৩৪৫৬৭৮৯'.indexOf(d));
@@ -787,10 +938,128 @@
             }, { threshold: 0.15 }).observe(target);
         })();
 
+        // ===== কাস্টমার রিভিউ ক্যারোসেল =====
+        // নমুনা রিভিউ: লাইভে যাওয়ার আগে আসল ক্রেতাদের রিভিউ দিয়ে বদলান
+        const REVIEWS = [
+            { name: 'রাকিব হাসান', city: 'ঢাকা', rating: 5, text: 'প্রতিদিন সকালে হাঁটতে যাওয়ার জন্য নিয়েছি। পায়ে হালকা লাগে, আর সাইজ চার্ট দেখে নেওয়ায় মাপও ঠিক হয়েছে।' },
+            { name: 'তানভীর আহমেদ', city: 'চট্টগ্রাম', rating: 5, text: 'অর্ডার করার প্রক্রিয়া খুব সহজ ছিল। কুশনিং আরামদায়ক, অনেকক্ষণ পরে থাকলেও পায়ে চাপ লাগে না।' },
+            { name: 'মেহেদী হাসান', city: 'সিলেট', rating: 4, text: 'দেখতে সুন্দর, ফিনিশিং ভালো। সাইজ নিয়ে দ্বিধায় ছিলাম, মেসেঞ্জারে জিজ্ঞেস করে সিদ্ধান্ত নিয়েছি।' },
+            { name: 'ইমরান হোসেন', city: 'রাজশাহী', rating: 5, text: 'ক্যাশ অন ডেলিভারি থাকায় ভরসা পেয়েছি। পণ্য হাতে নিয়ে দেখে টাকা দিয়েছি।' },
+            { name: 'আরিফুল ইসলাম', city: 'খুলনা', rating: 5, text: 'দৌড়ানোর জন্য নিয়েছি। গ্রিপ ও কুশনিং দুটোই ভালো লেগেছে।' },
+            { name: 'সাব্বির রহমান', city: 'বরিশাল', rating: 4, text: 'দাম অনুযায়ী মানসম্মত। কুপন ব্যবহার করে ছাড়ও পেয়েছি।' }
+        ];
+        (() => {
+            const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const track = document.getElementById('rv-track');
+            const dotsEl = document.getElementById('rv-dots');
+            const prevBtn = document.getElementById('rv-prev');
+            const nextBtn = document.getElementById('rv-next');
+            const toggleBtn = document.getElementById('rv-toggle');
+            const wrap = document.getElementById('rv-wrap');
+            if (!track) return;
+
+            track.innerHTML = REVIEWS.map((r, i) => `
+                <article class="rv-card flex flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" role="group" aria-roledescription="slide" aria-label="${i + 1} / ${REVIEWS.length}">
+                    <div class="flex items-center justify-between">
+                        <div class="text-amber-400" aria-label="৫ এর মধ্যে ${bn(r.rating)} রেটিং">${'<i class="fas fa-star"></i>'.repeat(r.rating)}${'<i class="fas fa-star text-gray-200"></i>'.repeat(5 - r.rating)}</div>
+                        <i class="fas fa-quote-right text-indigo-100 text-2xl" aria-hidden="true"></i>
+                    </div>
+                    <p class="mt-3 flex-1 text-sm leading-7 text-gray-700">${esc(r.text)}</p>
+                    <div class="mt-4 flex items-center gap-3 border-t border-gray-100 pt-4">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-700">${esc(r.name.charAt(0))}</div>
+                        <div><p class="text-sm font-semibold text-gray-900">${esc(r.name)}</p><p class="text-xs text-gray-500">${esc(r.city)}</p></div>
+                    </div>
+                </article>`).join('');
+            const cards = Array.from(track.children);
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const perView = () => (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1);
+            const maxIndex = () => Math.max(0, cards.length - perView());
+            const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth);
+            let index = 0, playing = !reduceMotion, pausedUntil = 0, inView = true, scrollTimer;
+
+            const renderDots = () => {
+                dotsEl.innerHTML = '';
+                for (let i = 0; i <= maxIndex(); i++) {
+                    const b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'flex h-6 items-center px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded';
+                    b.setAttribute('aria-label', `রিভিউ ${bn(i + 1)}`);
+                    b.innerHTML = '<span class="rv-dot"></span>';
+                    b.addEventListener('click', () => { hold(); goTo(i); });
+                    dotsEl.appendChild(b);
+                }
+                markDots();
+            };
+            const markDots = () => {
+                Array.from(dotsEl.children).forEach((b, i) => b.setAttribute('aria-current', i === index ? 'true' : 'false'));
+            };
+            const goTo = (i, smooth = true) => {
+                index = Math.min(Math.max(i, 0), maxIndex());
+                track.scrollTo({ left: cards[index].offsetLeft - cards[0].offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
+                markDots();
+            };
+            const hold = () => { pausedUntil = Date.now() + 8000; };
+
+            prevBtn.addEventListener('click', () => { hold(); goTo(index <= 0 ? maxIndex() : index - 1); });
+            nextBtn.addEventListener('click', () => { hold(); goTo(index >= maxIndex() ? 0 : index + 1); });
+            toggleBtn.addEventListener('click', () => {
+                playing = !playing;
+                toggleBtn.setAttribute('aria-pressed', String(playing));
+                toggleBtn.setAttribute('aria-label', playing ? 'অটো-স্লাইড বন্ধ করুন' : 'অটো-স্লাইড চালু করুন');
+                toggleBtn.innerHTML = `<i class="fas ${playing ? 'fa-pause' : 'fa-play'} text-xs" aria-hidden="true"></i>`;
+                if (playing) hold();
+            });
+            track.addEventListener('keydown', (ev) => {
+                if (ev.key === 'ArrowRight') { ev.preventDefault(); nextBtn.click(); }
+                if (ev.key === 'ArrowLeft') { ev.preventDefault(); prevBtn.click(); }
+            });
+            // হাতে সোয়াইপ/স্ক্রল করলে ইনডেক্স ও ডট মিলিয়ে নেওয়া
+            track.addEventListener('scroll', () => {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(() => {
+                    index = Math.min(maxIndex(), Math.max(0, Math.round(track.scrollLeft / step())));
+                    markDots();
+                }, 90);
+            }, { passive: true });
+            // মাউস/ফোকাস/টাচে অটো-স্লাইড থামানো
+            wrap.addEventListener('mouseenter', () => { pausedUntil = Infinity; });
+            wrap.addEventListener('mouseleave', () => { hold(); });
+            wrap.addEventListener('focusin', () => { pausedUntil = Infinity; });
+            wrap.addEventListener('focusout', () => { hold(); });
+            wrap.addEventListener('touchstart', hold, { passive: true });
+            if ('IntersectionObserver' in window) {
+                new IntersectionObserver(([en]) => { inView = en.isIntersecting; }, { threshold: 0.2 }).observe(wrap);
+            }
+            setInterval(() => {
+                if (!playing || !inView || document.hidden || Date.now() < pausedUntil) return;
+                goTo(index >= maxIndex() ? 0 : index + 1);
+            }, 4500);
+            window.addEventListener('resize', () => { renderDots(); goTo(index, false); });
+            renderDots();
+        })();
+
+        // ===== সাধারণ প্রশ্ন ও উত্তর (অ্যাকর্ডিয়ন) =====
+        (() => {
+            const items = Array.from(document.querySelectorAll('#faq-list .faq-item'));
+            const setOpen = (item, open) => {
+                item.classList.toggle('open', open);
+                item.querySelector('.faq-q').setAttribute('aria-expanded', String(open));
+                item.querySelector('.faq-a').inert = !open;
+            };
+            items.forEach((item) => {
+                item.querySelector('.faq-q').addEventListener('click', () => {
+                    const willOpen = !item.classList.contains('open');
+                    items.forEach((it) => setOpen(it, false));
+                    setOpen(item, willOpen);
+                });
+            });
+        })();
+
         // স্ক্রলের সময় কার্ডগুলো ধাপে ধাপে ভেসে ওঠা
         (() => {
             if (!('IntersectionObserver' in window)) return;
-            const els = document.querySelectorAll('#product-section section .grid > div, #product-section .border-indigo-100 .space-y-3 > div');
+            const els = document.querySelectorAll('.reveal-item');
             const io = new IntersectionObserver((entries) => entries.forEach((en) => {
                 if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
             }), { threshold: 0.15 });
